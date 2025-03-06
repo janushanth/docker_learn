@@ -10,10 +10,29 @@ project-root/
 │   ├── Dockerfile                # Dockerfile to build the Wellawattakid service image
 │   ├── requirements.txt          # Dependencies for Wellawattakid service
 
+## Description
 
+### `docker-compose.yml`
+This is the main configuration file to define and run multi-container Docker applications. It defines the services for Jaffnakid, Wellawattakid, and an Nginx load balancer that balances traffic between the two services.
 
-Description:
-1) docker-compose.yml: The main configuration file to define and run multi-container Docker applications, including the Jaffnakid, Wellawattakid, and Nginx load balancer services.
-2) nginx.conf: Nginx configuration for load balancing between the two services.
-3) jaffnakid/: Folder containing the Python application code, dependencies, and Dockerfile for the Jaffnakid service.
-4) wellawattakid/: Folder containing the Python application code, dependencies, and Dockerfile for the Wellawattakid service.
+### `nginx.conf`
+This file contains the Nginx configuration for load balancing between the Jaffnakid and Wellawattakid services.
+
+### `jaffnakid/`
+This folder contains the Python application code, the required dependencies (`requirements.txt`), and the `Dockerfile` to build the Docker image for the Jaffnakid service.
+
+### `wellawattakid/`
+This folder contains the Python application code, the required dependencies (`requirements.txt`), and the `Dockerfile` to build the Docker image for the Wellawattakid service.
+
+## Requirements
+
+- Docker
+- Docker Compose
+
+## Getting Started
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/your-username/docker_learn.git
+   cd docker_learn
