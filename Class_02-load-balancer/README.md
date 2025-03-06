@@ -42,7 +42,7 @@ This folder contains the Python application code, the required dependencies (`re
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/docker_learn.git
+   git clone https://github.com/janushanth/docker_learn.git
    cd docker_learn/Class_02-load-balancer
    ```
 
