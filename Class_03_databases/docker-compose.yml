@@ -1,0 +1,39 @@
+version: '3.8'                                       # Specify the version of the Docker Compose file format
+
+services:                                            # Define the services (containers) to be run
+  mongodb:
+    image: mongo:latest                              # Use the latest MongoDB image from Docker Hub
+    container_name: mongodb                          # Name the container 'mongodb'
+    restart: unless-stopped                          # Always restart the container unless it is explicitly stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root               # Set the root username for MongoDB
+      MONGO_INITDB_ROOT_PASSWORD: example            # Set the root password for MongoDB
+    ports:
+      - "27017:27017"                                # Map port 27017 on the host to port 27017 in the container (default MongoDB port)
+    volumes:
+      - mongodb_data:/data/db                        # Mount the Docker volume 'mongodb_data' to '/data/db' in the container
+
+  mongo-express:
+    image: mongo-express:latest                      # Use the latest Mongo Express image from Docker Hub
+    container_name: mongo-express                    # Name the container 'mongo-express'
+    restart: unless-stopped                          # Always restart the container unless it is explicitly stopped
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb              # Set the MongoDB server address (container name)
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root          # Set the admin username for MongoDB
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example       # Set the admin password for MongoDB
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin         # Set the authentication database for MongoDB
+    ports:
+      - "8081:8081"                                  # Map port 8081 on the host to port 8081 in the container (default Mongo Express port)
+    depends_on:
+      - mongodb                                      # Ensure 'mongo-express' starts only after 'mongodb' is up and running
+
+volumes:
+  mongodb_data:                                      # Define a Docker volume for MongoDB data storage
+    driver: local                                    # Use the local driver for local storage
+
+#admin:pass - Default credentials for Mongo Express
+# docker exec -it mongo-express ping mongodb          # Command to ping the 'mongodb' container from the 'mongo-express' container
+# docker exec -it mongodb ping mongo-express          # Command to ping the 'mongo-express' container from the 'mongodb' container
+# docker logs mongodb                                 # Command to view the logs of the 'mongodb' container
+# docker logs mongo-express                           # Command to view the logs of the 'mongo-express' container
+# docker exec -it mongodb mongosh -u root -p example --authenticationDatabase admin --eval "show databases"  # Command to execute MongoDB shell and show databases
