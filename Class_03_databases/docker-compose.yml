@@ -11,7 +11,8 @@ services:                                            # Define the services (cont
     ports:
       - "27017:27017"                                # Map port 27017 on the host to port 27017 in the container (default MongoDB port)
     volumes:
-      - mongodb_data:/data/db                        # Mount the Docker volume 'mongodb_data' to '/data/db' in the container
+      - mongodb_data:/data/db                        # Mount the Docker volume 'mongodb_data' to '/data/db' in the container  --> this automatically create inside the system folder
+      - ./logs/mongodb:/var/log/mongodb              # Mount the Directory Local folder specify folder ./log (./)
 
   mongo-express:
     image: mongo-express:latest                      # Use the latest Mongo Express image from Docker Hub
