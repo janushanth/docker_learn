@@ -4,7 +4,7 @@ pipeline {
     environment {
         GIT_REPO = 'https://github.com/janushanth/docker_learn.git'
         DOCKER_IMAGE = 'artifactory:8081/artifactory/docker-repo/python-flask-app' // Internal Artifactory URL
-        ARTIFACTORY_URL = 'http://artifactory:8081'  // Internal Docker service name
+        ARTIFACTORY_URL = 'http://artifactory:8082'  // Internal Docker service name
         ARTIFACTORY_CRED = credentials('jfrog-credentials') // Stored in Jenkins
     }
 

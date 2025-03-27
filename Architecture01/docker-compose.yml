@@ -58,7 +58,10 @@ services:  # Defines the services (containers) to be created.
     networks:
       - ecosystem
     volumes:
-      - ~/jenkins_home:/var/jenkins_home  # Make sure permissions are correct     
+      - ~/jenkins_home_tech:/var/jenkins_home  # Make sure permissions are correct     
+      - /var/run/docker.sock:/var/run/docker.sock  # Allow Jenkins to interact with the Docker daemon
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock  # Set the Docker host to the socket
 
 networks:  # Defines custom networks for the services.
   ecosystem:  # Creates a network named 'ecosystem'.
