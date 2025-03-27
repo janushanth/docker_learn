@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: always
+    ports:
+      - "8100:8080"    # Jenkins UI exposed on port 8100
+      - "50000:50000"  # Jenkins agent connection port
+    networks:
+      - ecosystem
+    volumes:
+      - ~/jenkins_home:/var/jenkins_home  # Ensure correct permissions
+
+  jenkins_slave:
+    image: jenkins/jnlp-slave:latest
+    container_name: jnlp_slave
+    user: root
+    restart: always
+    command: ["jenkins-agent", "-url", "http://jenkins:8080", "-workDir", "/home/jenkins/agent", "-secret", "my-secret-key", "-name", "my-agent"]
+    volumes:
+      - ~/jnlp_slave_home:/home/jenkins/agent  # Fixed path
+    networks:
+      - ecosystem
+    depends_on:
+      - jenkins
+
+networks:
+  ecosystem:
+    driver: bridge

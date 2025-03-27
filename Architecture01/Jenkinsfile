@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_REPO = 'https://github.com/jasilk/docker_learn.git'
+        DOCKER_IMAGE = 'artifactory:8081/artifactory/docker-repo/python-flask-app' // Internal Artifactory URL
+        ARTIFACTORY_URL = 'http://artifactory:8081'  // Internal Docker service name
+        ARTIFACTORY_CRED = credentials('jfrog-credentials') // Stored in Jenkins
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git credentialsId: 'github-credentials', url: "${GIT_REPO}", branch: 'main'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE}:latest", ".")
+                }
+            }
+        }
+
+        stage('Login to JFrog') {
+            steps {
+                script {
+                    sh "docker login ${ARTIFACTORY_URL} -u ${ARTIFACTORY_CRED_USR} -p ${ARTIFACTORY_CRED_PSW}"
+                }
+            }
+        }
+
+        stage('Push to JFrog Artifactory') {
+            steps {
+                script {
+                    docker.image("${DOCKER_IMAGE}:latest").push()
+                }
+            }
+        }
+    }
+}
