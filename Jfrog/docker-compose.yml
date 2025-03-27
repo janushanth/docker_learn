@@ -7,7 +7,7 @@ services:  # Defines the services (containers) to be created.
     restart: always  # Ensures the container restarts automatically if it stops.
     ports:  # Maps container ports to the host machine.
       - "8081:8081"  # Maps port 8081 for the Artifactory UI/Web interface.
-      - "8300:8082"  # Maps port 8082 for HTTP communication.
+      - "8082:8082"  # Maps port 8082 for HTTP communication.
       - "8046:8046"  # Maps port 8046 for internal communication.
     networks:  # Specifies the network(s) the container will connect to.
       - ecosystem  # Connects to the 'ecosystem' network.
