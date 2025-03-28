@@ -63,6 +63,20 @@ services:  # Defines the services (containers) to be created.
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock  # Set the Docker host to the socket
 
+  nexus:
+    image: sonatype/nexus3:latest
+    container_name: nexus
+    restart: always
+    ports:
+      - "8082:8081"  # Nexus UI and API
+      - "8083:8083"  # Repository access (Docker, Helm, etc.)
+    networks:
+      - ecosystem
+    volumes:
+      - nexus_data:/nexus-data  # Persist Nexus repository data
+    environment:
+      - INSTALL4J_ADD_VM_PARAMS=-Xms512m -Xmx2g -XX:MaxDirectMemorySize=2g  # Set memory limits for Nexus      
+
 networks:  # Defines custom networks for the services.
   ecosystem:  # Creates a network named 'ecosystem'.
 
