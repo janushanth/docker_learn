@@ -3,10 +3,8 @@ pipeline {
 
     environment {
         GIT_REPO = 'https://github.com/janushanth/docker_learn.git'
-        DOCKER_IMAGE = 'artifactory:8082/artifactory/docker-repo/python-flask-app' // Internal Artifactory URL
-        IMAGE_TAR_PATH = "python-flask-app-${BUILD_ID}.tar" // Tar file path with build ID for versioning
-        ARTIFACTORY_URL = 'http://artifactory:8082/artifactory/docker-repo/' // Artifactory URL for upload
-        ARTIFACTORY_CREDENTIALS = 'jenkins' // Jenkins credentials ID for Artifactory
+        DOCKER_IMAGE = 'localhost:8083/repository/docker-repo/python-flask-app' // Nexus Docker repository URL
+        NEXUS_CREDENTIALS = 'nexus-credentials' // Jenkins credentials ID for Nexus
         DOCKER_IMAGE_TAG = "${DOCKER_IMAGE}:${BUILD_ID}" // Tag Docker image with build ID
         OLD_TAG = "${DOCKER_IMAGE}:${BUILD_ID - 1}" // Previous tag based on the previous build ID
     }
@@ -27,20 +25,24 @@ pipeline {
             }
         }
 
-        stage('Save Docker Image as Tarball') {
+        stage('Login to Nexus Docker Registry') {
             steps {
                 script {
-                    // Save the Docker image as a tarball, tagged with the Jenkins build ID
-                    sh "docker save -o ${IMAGE_TAR_PATH} ${DOCKER_IMAGE_TAG}"
+                    // Login to Nexus Docker repository using Docker credentials
+                    withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh """
+                            echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin http://localhost:8083/repository/docker-repo/
+                        """
+                    }
                 }
             }
         }
 
-        stage('Upload Docker Image to Artifactory') {
+        stage('Push Docker Image to Nexus') {
             steps {
                 script {
-                    // Upload the saved tarball to Artifactory with versioning based on the build ID
-                    sh "curl -u jenkins:Jenkins@123# -T ${IMAGE_TAR_PATH} ${ARTIFACTORY_URL}${IMAGE_TAR_PATH}"
+                    // Push the Docker image to Nexus
+                    sh "docker push ${DOCKER_IMAGE_TAG}"
                 }
             }
         }
