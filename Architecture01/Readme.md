@@ -22,3 +22,15 @@ Create the Artifactory repo - docker-repo
 #jenkins github id  for credentials - github-credentials
 
 #jenkins artifactory id  for credentials - jfrog-credentials
+
+
+###Nexus####
+docker exec nexus cat /nexus-data/admin.password
+default username - admin
+new password -nexusadmin
+#Repository Typ - Hosted / Store your own Docker images (Push & Pull)
+
+Create the Artifactory repo - docker-repo
+Create the Artifactory repo - helm-repo
+
+docker login -u admin -p <your-password> http://localhost:8083

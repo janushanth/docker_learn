@@ -83,3 +83,4 @@ networks:  # Defines custom networks for the services.
 volumes:  # Defines named volumes for persistent data storage.
   pgdata:  # Volume for PostgreSQL data.
   artifactory_data:  # Volume for Artifactory data.
+  nexus_data:  # Volume for Nexus storage
