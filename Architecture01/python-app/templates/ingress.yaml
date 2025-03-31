@@ -4,23 +4,21 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-ingress
   annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
+  ingressClassName: nginx
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host }}
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ . }}
+          - path: /api
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Release.Name }}
+                name: {{ .Release.Name }}
                 port:
-                  number: {{ $.Values.service.port }}
-          {{- end }}
-    {{- end }}
+                  number: {{ .Values.service.port }}
   {{- with .Values.ingress.tls }}
   tls:
     {{- toYaml . | nindent 4 }}
